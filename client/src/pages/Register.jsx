@@ -18,7 +18,18 @@ import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
   const { user } = useContext(AuthContext);
-  const { registerInfo, updateRegisterInfo } = useContext(AuthContext);
+  const {
+    registerInfo,
+    updateRegisterInfo,
+    registerUser,
+    registerError,
+    isRegisterLoading,
+    loginInfo,
+    loginUser,
+    updateLoginInfo,
+    loginError,
+    isLoginLoading,
+  } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(true);
@@ -174,49 +185,72 @@ const Register = () => {
                 <p className="text-white font-semibold text-[27px]">
                   Login to your account{" "}
                 </p>
-                <label className="flex flex-col text-[15px] w-[340px] mt-20">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="rounded-[20px] py-3 px-6 font-medium bg-white"
-                  />
-                </label>
-                <label className="relative flex flex-col  text-[15px] w-[340px] mt-9">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    className="textbox rounded-[40px] py-3 px-6 font-medium bg-white"
-                  />
-                  <img
-                    className="absolute top-3 right-3 bg-transparent w-[25px] hover:cursor-pointer"
-                    src={showPassword ? eye : eye_off}
-                    alt="frame"
-                    onClick={() => setShowPassword(!showPassword)}
-                  />
-                </label>
-
-                <motion.button
-                  whileHover={{
-                    backgroundColor: "#83DDC8",
-                    boxShadow: "0px 0px 10px rgb(255,255,255)",
-                  }}
-                  whileTap={{ y: 5 }}
-                  className="mt-20 bg-white text-[17px] font-semibold py-2 px-6 rounded-[20px]"
+                <form
+                  onSubmit={loginUser}
+                  className="flex flex-col items-center justify-center"
                 >
-                  Login
-                </motion.button>
+                  <label className="flex flex-col text-[15px] w-[340px] mt-20">
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      onChange={(e) =>
+                        updateLoginInfo({
+                          ...loginInfo,
+                          email: e.target.value,
+                        })
+                      }
+                      className="rounded-[20px] py-3 px-6 font-medium bg-white"
+                    />
+                  </label>
+                  <label className="relative flex flex-col  text-[15px] w-[340px] mt-9">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      onChange={(e) =>
+                        updateLoginInfo({
+                          ...loginInfo,
+                          password: e.target.value,
+                        })
+                      }
+                      className="textbox rounded-[40px] py-3 px-6 font-medium bg-white"
+                    />
+                    <img
+                      className="absolute top-3 right-3 bg-transparent w-[25px] hover:cursor-pointer"
+                      src={showPassword ? eye : eye_off}
+                      alt="frame"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  </label>
+
+                  <motion.button
+                    type="submit"
+                    whileHover={{
+                      backgroundColor: "#83DDC8",
+                      boxShadow: "0px 0px 10px rgb(255,255,255)",
+                    }}
+                    whileTap={{ y: 5 }}
+                    className="mt-12 bg-white text-[17px] font-semibold py-2 px-6 rounded-[20px]"
+                  >
+                    {isLoginLoading ? "Loading ..." : "Login"}
+                  </motion.button>
+                </form>
                 <div className="flex flex-row gap-2 mt-9 text-[15px]">
                   <p className="text-white">you don't have an account ?</p>
                   <div
                     className="text-light-green-color hover:cursor-pointer"
                     onClick={() => {
-                      setShowLogin(false);
                       setShowRegister(true);
+                      setShowLogin(false);
                     }}
                   >
                     Register
                   </div>
                 </div>
+                {loginError?.error && (
+                  <p className="text-red-700 mt-6 bg-red-200 px-6 py-1 rounded-[10px] text-[15px]">
+                    {loginError.message}
+                  </p>
+                )}
               </motion.div>
             </AnimatePresence>
           )}
@@ -237,62 +271,68 @@ const Register = () => {
                 <p className="text-white font-semibold text-[27px]">
                   Welcome to WESH !{" "}
                 </p>
-                <label className="flex flex-col text-[15px] w-[340px] mt-20">
-                  <input
-                    type="text"
-                    onChange={(e) =>
-                      updateRegisterInfo({
-                        ...registerInfo,
-                        name: e.target.value,
-                      })
-                    }
-                    placeholder="Name"
-                    className="rounded-[20px] py-3 px-6 font-medium bg-white"
-                  />
-                </label>
-                <label className="flex flex-col text-[15px] w-[340px] mt-9">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) =>
-                      updateRegisterInfo({
-                        ...registerInfo,
-                        email: e.target.value,
-                      })
-                    }
-                    className="rounded-[20px] py-3 px-6 font-medium bg-white"
-                  />
-                </label>
-                <label className="relative flex flex-col  text-[15px] w-[340px] mt-9">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    onChange={(e) =>
-                      updateRegisterInfo({
-                        ...registerInfo,
-                        password: e.target.value,
-                      })
-                    }
-                    className="textbox rounded-[40px] py-3 px-6 font-medium bg-white"
-                  />
-                  <img
-                    className="absolute top-3 right-3 bg-transparent w-[25px] hover:cursor-pointer"
-                    src={showPassword ? eye : eye_off}
-                    alt="frame"
-                    onClick={() => setShowPassword(!showPassword)}
-                  />
-                </label>
-
-                <motion.button
-                  whileHover={{
-                    backgroundColor: "#DED35E",
-                    boxShadow: "0px 0px 10px rgb(255,255,255)",
-                  }}
-                  whileTap={{ y: 5 }}
-                  className="mt-12 bg-white text-[17px] font-semibold py-2 px-6 rounded-[20px]"
+                <form
+                  onSubmit={registerUser}
+                  className="flex flex-col items-center justify-center"
                 >
-                  Register
-                </motion.button>
+                  <label className="flex flex-col text-[15px] w-[340px] mt-20">
+                    <input
+                      type="text"
+                      onChange={(e) =>
+                        updateRegisterInfo({
+                          ...registerInfo,
+                          name: e.target.value,
+                        })
+                      }
+                      placeholder="Name"
+                      className="rounded-[20px] py-3 px-6 font-medium bg-white"
+                    />
+                  </label>
+                  <label className="flex flex-col text-[15px] w-[340px] mt-9">
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      onChange={(e) =>
+                        updateRegisterInfo({
+                          ...registerInfo,
+                          email: e.target.value,
+                        })
+                      }
+                      className="rounded-[20px] py-3 px-6 font-medium bg-white"
+                    />
+                  </label>
+                  <label className="relative flex flex-col  text-[15px] w-[340px] mt-9">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      onChange={(e) =>
+                        updateRegisterInfo({
+                          ...registerInfo,
+                          password: e.target.value,
+                        })
+                      }
+                      className="textbox rounded-[40px] py-3 px-6 font-medium bg-white"
+                    />
+                    <img
+                      className="absolute top-3 right-3 bg-transparent w-[25px] hover:cursor-pointer"
+                      src={showPassword ? eye : eye_off}
+                      alt="frame"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  </label>
+
+                  <motion.button
+                    type="submit"
+                    whileHover={{
+                      backgroundColor: "#DED35E",
+                      boxShadow: "0px 0px 10px rgb(255,255,255)",
+                    }}
+                    whileTap={{ y: 5 }}
+                    className="mt-12 bg-white text-[17px] font-semibold py-2 px-6 rounded-[20px]"
+                  >
+                    {isRegisterLoading ? "Loading ..." : "Register"}
+                  </motion.button>
+                </form>
                 <div className="flex flex-row gap-2 mt-9 text-[15px]">
                   <p className="text-white">you already have an account ?</p>
                   <div
@@ -305,6 +345,11 @@ const Register = () => {
                     Login
                   </div>
                 </div>
+                {registerError?.error && (
+                  <p className="text-red-700 mt-6 bg-red-200 px-6 py-1 rounded-[10px] text-[15px]">
+                    {registerError.message}
+                  </p>
+                )}
               </motion.div>
             </AnimatePresence>
           )}
