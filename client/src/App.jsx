@@ -5,20 +5,23 @@ import Register from "./pages/Register";
 import NavBar from "./components/navBar";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import { ChatContextProvider } from "./context/ChatContext";
 function App() {
   const { user } = useContext(AuthContext);
   return (
-    <div className="bg-black">
-      <div className="x l:max-w-[1600px] mx-auto">
-        {user? <NavBar /> : null}
-        <Routes>
-          <Route path="/" element={user ? <Chat/> : <Login/>} />
-          <Route path="/Login" element={user ? <Chat/> : <Login/>} />
-          <Route path="/Register" element={user ? <Chat/> : <Register/>} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+    <ChatContextProvider user = {user}>
+      <div className="bg-dark-blue">
+        <div className=" xl:max-w-[1500px] mx-auto">
+          {user ? <NavBar /> : null}
+          <Routes>
+            <Route path="/" element={user ? <Chat /> : <Login />} />
+            <Route path="/Login" element={user ? <Chat /> : <Login />} />
+            <Route path="/Register" element={user ? <Chat /> : <Register />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </ChatContextProvider>
   );
 }
 

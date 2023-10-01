@@ -9,6 +9,9 @@ import green_capsule from "./green_capsule.png";
 import light_green_capsule from "./light_green_capsule.png";
 import eye from "./eye.png";
 import eye_off from "./eye_off.png";
+import logout_icon from "./logout-icon.png";
+import user_icon from "./user-icon.png";
+import users_icon from "./users-icon.png";
 
 export {
   yellow_capsule,
@@ -22,4 +25,7 @@ export {
   light_green_capsule,
   eye,
   eye_off,
+  logout_icon,
+  user_icon,
+  users_icon,
 };

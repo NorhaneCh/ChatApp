@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { styles } from "../styles";
+import { logout_icon, user_icon } from "../assets";
+import { motion } from "framer-motion";
 
 const NavBar = () => {
   const { user } = useContext(AuthContext);
@@ -14,10 +16,19 @@ const NavBar = () => {
           <span className="text-light-green-color">WESH</span>
           <span className="text-yellow-color"> !</span>
         </p>
-        <p>{`Logged in as ${user.name}`}</p>
-        <button className="hover:text-light-green-color" onClick={logoutUser}>
-          <p>Logout</p>
-        </button>
+        <div className="flex flex-row items-end gap-2">
+          <img className="w-[25px] h-[25px]" src={user_icon} alt="frame" />
+          <p className="text-[16px] font-medium">{user.name.toUpperCase()}</p>
+        </div>
+        <motion.button
+        whileHover={{backgroundColor : '#DED35E'}}
+        whileTap={{y : 5}}
+          className="flex flex-row gap-1 justify-center items-center text-dark-blue bg-light-green-color px-4 py-1 rounded-[10px]"
+          onClick={logoutUser}
+        >
+          <img className="w-[20px] h-[20px]" src={logout_icon} alt="frame" />
+          <p className="text-[16px] font-medium">Logout</p>
+        </motion.button>
       </div>
     </div>
   );
