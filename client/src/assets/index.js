@@ -12,6 +12,11 @@ import eye_off from "./eye_off.png";
 import logout_icon from "./logout-icon.png";
 import user_icon from "./user-icon.png";
 import users_icon from "./users-icon.png";
+import message_icon from "./message-icon.png";
+import emoji_icon from "./emoji-icon.png";
+import send_icon from "./send-icon.png";
+import edit_icon from "./edit-icon.png";
+import friend_icon from "./friend-icon.png";
 
 export {
   yellow_capsule,
@@ -28,4 +33,9 @@ export {
   logout_icon,
   user_icon,
   users_icon,
+  message_icon,
+  emoji_icon,
+  send_icon,
+  edit_icon,
+  friend_icon,
 };

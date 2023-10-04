@@ -156,7 +156,7 @@ const Register = () => {
         src={light_green_capsule}
         alt="shape"
       />
-      <p className="absolute top-0 left-[2%] text-white font-bold text-[50px]">
+      <p className="absolute top-6 left-[2%] text-white font-bold text-[50px]">
         {" "}
         WESH !
       </p>
@@ -229,9 +229,15 @@ const Register = () => {
                       boxShadow: "0px 0px 10px rgb(255,255,255)",
                     }}
                     whileTap={{ y: 5 }}
-                    className="mt-12 bg-white text-[17px] font-semibold py-2 px-6 rounded-[20px]"
+                    className={`mt-12 bg-white text-[17px] font-semibold ${
+                      isLoginLoading ? "p-1" : "p-2"
+                    } w-[100px] rounded-[20px]`}
                   >
-                    {isLoginLoading ? "Loading ..." : "Login"}
+                    {isLoginLoading ? (
+                      <ClipLoader color="#000000" size={25} />
+                    ) : (
+                      "Login"
+                    )}
                   </motion.button>
                 </form>
                 <div className="flex flex-row gap-2 mt-9 text-[15px]">
@@ -328,9 +334,15 @@ const Register = () => {
                       boxShadow: "0px 0px 10px rgb(255,255,255)",
                     }}
                     whileTap={{ y: 5 }}
-                    className="mt-12 bg-white text-[17px] font-semibold py-2 px-6 rounded-[20px]"
+                    className={`mt-12 bg-white text-[17px] font-semibold ${
+                      isLoginLoading ? "p-1" : "p-2"
+                    } w-[100px] rounded-[20px]`}
                   >
-                    {isRegisterLoading ? "Loading ..." : "Register"}
+                    {isRegisterLoading ? (
+                      <ClipLoader color="#000000" size={25} />
+                    ) : (
+                      "Register"
+                    )}
                   </motion.button>
                 </form>
                 <div className="flex flex-row gap-2 mt-9 text-[15px]">

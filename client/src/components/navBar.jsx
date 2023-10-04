@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { styles } from "../styles";
-import { logout_icon, user_icon } from "../assets";
+import { logout_icon, message_icon, user_icon } from "../assets";
 import { motion } from "framer-motion";
 
 const NavBar = () => {
@@ -18,17 +18,22 @@ const NavBar = () => {
         </p>
         <div className="flex flex-row items-end gap-2">
           <img className="w-[25px] h-[25px]" src={user_icon} alt="frame" />
-          <p className="text-[16px] font-medium">{user.name.toUpperCase()}</p>
+          <p className="text-[16px] font-medium">{user.name}</p>
         </div>
-        <motion.button
-        whileHover={{backgroundColor : '#DED35E'}}
-        whileTap={{y : 5}}
-          className="flex flex-row gap-1 justify-center items-center text-dark-blue bg-light-green-color px-4 py-1 rounded-[10px]"
-          onClick={logoutUser}
-        >
-          <img className="w-[20px] h-[20px]" src={logout_icon} alt="frame" />
-          <p className="text-[16px] font-medium">Logout</p>
-        </motion.button>
+        <div className="flex flex-row gap-4">
+          <motion.button whileTap={{ y: 3 }}>
+            <img src={message_icon} alt="frame" className="w-[23px]" />
+          </motion.button>
+          <motion.button
+            whileHover={{ backgroundColor: "#DED35E" }}
+            whileTap={{ y: 5 }}
+            className="flex flex-row gap-1 justify-center items-center text-dark-blue bg-light-green-color px-4 py-1 rounded-[10px]"
+            onClick={logoutUser}
+          >
+            <img className="w-[20px] h-[20px]" src={logout_icon} alt="frame" />
+            <p className="text-[16px] font-medium">Logout</p>
+          </motion.button>
+        </div>
       </div>
     </div>
   );
