@@ -1,5 +1,10 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { getRequest, baseUrl, postRequest } from "../utils/services";
+import {
+  getRequest,
+  baseUrl,
+  postRequest,
+  deleteRequest,
+} from "../utils/services";
 
 export const ChatContext = createContext();
 export const ChatContextProvider = ({ children, user }) => {
@@ -7,6 +12,22 @@ export const ChatContextProvider = ({ children, user }) => {
   const [isUserChatsLoading, setIsUserChatsLoading] = useState(false);
   const [userChatsError, setUserChatsError] = useState(null);
   const [potentialChats, setPotentialChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState(null);
+  const [isMessagesLoading, setIsMessagesLoading] = useState(false);
+  const [messageError, setMessagesError] = useState(null);
+  const [sendTextMessageError, setSendTextMessageError] = useState(null);
+  const [newMessage, setNewMessage] = useState(null);
+  const [socket, setSocket] = useState(null);
+
+  // initial socket
+  // useEffect(() => {
+  //   const newSocket = io("http://localhost:3000");
+  //   setSocket(newSocket);
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // }, [user]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -16,7 +37,7 @@ export const ChatContextProvider = ({ children, user }) => {
       }
       const chats = response.filter((u) => {
         let isChatCreated = false;
-        if (user._id === u._id) return false;
+        if (user?._id === u?._id) return false;
 
         if (userChats) {
           isChatCreated = userChats?.some((chat) => {
@@ -44,6 +65,26 @@ export const ChatContextProvider = ({ children, user }) => {
     };
     getUserChats();
   }, [user]);
+  useEffect(() => {
+    const getMessages = async () => {
+      setIsMessagesLoading(true);
+      setMessagesError(null);
+      const response = await getRequest(
+        `${baseUrl}/messages/${currentChat?._id}`
+      );
+      setIsMessagesLoading(false);
+      if (response.error) {
+        return setMessagesError(response);
+      }
+      setMessages(response);
+    };
+
+    getMessages();
+  }, [currentChat]);
+
+  const updateCurrentChat = useCallback((chat) => {
+    setCurrentChat(chat);
+  }, []);
 
   const createChat = useCallback(async (firstId, secondId) => {
     const response = await postRequest(
@@ -53,8 +94,43 @@ export const ChatContextProvider = ({ children, user }) => {
     if (response.error) {
       return console.log("Error creating chat ", response);
     }
+    setCurrentChat(response);
     setUserChats((prev) => [...prev, response]);
   }, []);
+
+  const deleteChat = async (chat, setChatOptions) => {
+    const chatId = chat?._id;
+    const response = await deleteRequest(`${baseUrl}/chats/delete/${chatId}`);
+    if (response.error) {
+      return console.log("Error deleating chat ", response);
+    }
+    setChatOptions(false);
+    const updatedChats = userChats.filter((chat) => chat._id !== chatId);
+    setUserChats(updatedChats);
+    setCurrentChat(null);
+  };
+
+  const sendTextMessage = useCallback(
+    async (textMessage, sender, currentChat, setTextMessage) => {
+      if (!textMessage) return console.log("you must type something ...");
+      const response = await postRequest(
+        `${baseUrl}/messages`,
+        JSON.stringify({
+          chatId: currentChat._id,
+          senderId: sender._id,
+          text: textMessage,
+        })
+      );
+      if (response.error) {
+        return console.log("Error creating chat ", response);
+      }
+      setNewMessage(response);
+      setMessages((prev) => [...prev, response]);
+      setTextMessage("");
+    },
+    []
+  );
+
   return (
     <ChatContext.Provider
       value={{
@@ -63,6 +139,14 @@ export const ChatContextProvider = ({ children, user }) => {
         userChatsError,
         potentialChats,
         createChat,
+        updateCurrentChat,
+        messages,
+        isMessagesLoading,
+        messageError,
+        currentChat,
+        sendTextMessage,
+        currentChat,
+        deleteChat,
       }}
     >
       {children}

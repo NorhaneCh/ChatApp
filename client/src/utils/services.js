@@ -38,3 +38,21 @@ export const getRequest = async (url) => {
 
   return data;
 };
+
+export const deleteRequest = async (url) => {
+  const response = await fetch(url, {
+    method: "DELETE",
+  });
+  const data = await response.text();
+  console.log("data : ", data);
+  if (!response.ok) {
+    let message = "An error occured ...";
+
+    if (data?.error) {
+      message = data.message;
+    }
+    return { error: true, message };
+  }
+
+  return data;
+};

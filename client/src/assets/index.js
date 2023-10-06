@@ -17,6 +17,8 @@ import emoji_icon from "./emoji-icon.png";
 import send_icon from "./send-icon.png";
 import edit_icon from "./edit-icon.png";
 import friend_icon from "./friend-icon.png";
+import more_icon from "./more-icon.png"
+import notif_bell from "./notifbell-icon.png"
 
 export {
   yellow_capsule,
@@ -38,4 +40,6 @@ export {
   send_icon,
   edit_icon,
   friend_icon,
+  more_icon,
+  notif_bell
 };
