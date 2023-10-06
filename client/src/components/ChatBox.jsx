@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { emoji_icon, message_icon, more_icon, send_icon } from "../assets";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../context/ChatContext";
 import ClipLoader from "react-spinners/ClipLoader";
 import { AuthContext } from "../context/AuthContext";
@@ -21,7 +21,11 @@ const ChatBox = ({ setShowUsersList }) => {
   const { recipientUser } = useFetchRecipentUser(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
   const [showChatOptions, setShowChatOptions] = useState(false);
+  const scroll = useRef();
 
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   return (
     <div className="bg-white/5 h-[700px] rounded-md rounded-l-none flex-col items-center justify-center text-[13px] w-full">
       {!currentChat ? (
@@ -55,11 +59,13 @@ const ChatBox = ({ setShowUsersList }) => {
           <div className="h-[95%]">
             <div className="h-[91%] overflow-y-scroll">
               {isMessagesLoading ? (
-                <ClipLoader color="#000000" size={25} />
+                <div className="flex justify-center mt-44">
+                  <ClipLoader color="#ffff" size={50} />
+                </div>
               ) : (
                 <div className="px-2">
                   {messages?.map((message, index) => (
-                    <p
+                    <div
                       key={index}
                       className={`px-4 py-2 mt-3 relative rounded-[10px] overflow-hidden max-w-[450px] min-w-[100px] ${
                         message.senderId === user?._id
@@ -71,7 +77,7 @@ const ChatBox = ({ setShowUsersList }) => {
                       <p className="absolute text-[11px] bottom-0 right-1">
                         {moment(message.createdAt).calendar()}
                       </p>
-                    </p>
+                    </div>
                   ))}
                 </div>
               )}

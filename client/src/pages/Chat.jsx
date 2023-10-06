@@ -12,7 +12,7 @@ import ChatBox from "../components/ChatBox";
 const Chat = () => {
   const { user } = useContext(AuthContext);
   const [showUsersList, setShowUsersList] = useState(false);
-  const { userChats, isUserChatsLoading, updateCurrentChat } =
+  const { userChats, isUserChatsLoading, updateCurrentChat} =
     useContext(ChatContext);
   const [users, setUsers] = useState();
 

@@ -23,7 +23,7 @@ const PotentialChats = ({ setShowUsersList, users }) => {
       document.removeEventListener("mousedown", handler);
     };
   }, []);
-  const { potentialChats, createChat } = useContext(ChatContext);
+  const { potentialChats, createChat, onLineUsers } = useContext(ChatContext);
   return (
     <AnimatePresence>
       <motion.div
@@ -37,25 +37,32 @@ const PotentialChats = ({ setShowUsersList, users }) => {
           className="bg-dark-blue text-white h-[60%] w-[300px] rounded-md flex flex-col"
         >
           <p className="text-[15px] py-3 border-b border-white/10 w-full text-center">
-            New message
+            New chat
           </p>
           <div className="w-full h-full overflow-y-scroll">
             {potentialChats &&
-              potentialChats.map((chat, index) => (
+              potentialChats.map((chatUser, index) => (
                 <button
                   key={index}
                   className="relative w-full flex flex-row gap-4 pl-6 py-2 border-b border-white/10 px-3 text-[15px] items-center  hover:bg-white/5"
                   onClick={() => {
-                    handleClickUser(chat);
+                    handleClickUser(chatUser);
                   }}
                 >
-                  <div className="bg-green-500 p-1 rounded-full"></div>
+                  <div
+                    className={`bg-green-500 p-1 rounded-full ${
+                      onLineUsers.some((u) => u?.userId === chatUser._id)
+                        ? ""
+                        : "invisible"
+                    }`}
+                  ></div>
+
                   <img
                     src={friend_icon}
                     alt="frame"
                     className="w-[30px] h-[30px]"
                   />
-                  <p className="text-[14px]">{chat.name}</p>
+                  <p className="text-[14px]">{chatUser.name}</p>
                 </button>
               ))}
 

@@ -5,6 +5,7 @@ import {
   postRequest,
   deleteRequest,
 } from "../utils/services";
+import { io } from "socket.io-client";
 
 export const ChatContext = createContext();
 export const ChatContextProvider = ({ children, user }) => {
@@ -19,15 +20,49 @@ export const ChatContextProvider = ({ children, user }) => {
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState(null);
   const [socket, setSocket] = useState(null);
+  const [onLineUsers, setOnLineUsers] = useState([]);
 
   // initial socket
-  // useEffect(() => {
-  //   const newSocket = io("http://localhost:3000");
-  //   setSocket(newSocket);
-  //   return () => {
-  //     newSocket.disconnect();
-  //   };
-  // }, [user]);
+
+  // console.log("online users : ", onLineUsers);
+  useEffect(() => {
+    const newSocket = io("http://localhost:3000");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [user]);
+  // add online users
+  useEffect(() => {
+    if (socket === null) return;
+    socket.emit("addNewUser", user?._id);
+    socket.on("getOnLineUsers", (res) => {
+      setOnLineUsers(res);
+    });
+    return () => {
+      socket.off("getOnLineUsers");
+    };
+  }, [socket]);
+
+  //send message
+  useEffect(() => {
+    if (socket === null) return;
+    const recipientId = currentChat?.members?.find((id) => id !== user._id);
+    socket.emit("sendMessage", { ...newMessage, recipientId });
+  }, [newMessage]);
+  //receive message
+  useEffect(() => {
+    if (socket === null) return;
+    socket.on("getMessage", (res) => {
+      if (currentChat?._id !== res.chatId) return;
+
+      setMessages((prev) => [...prev, res]);
+    });
+    return () => {
+      socket.off("getMessage");
+    };
+  }, [socket, currentChat]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -147,6 +182,7 @@ export const ChatContextProvider = ({ children, user }) => {
         sendTextMessage,
         currentChat,
         deleteChat,
+        onLineUsers,
       }}
     >
       {children}

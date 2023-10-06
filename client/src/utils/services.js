@@ -44,7 +44,6 @@ export const deleteRequest = async (url) => {
     method: "DELETE",
   });
   const data = await response.text();
-  console.log("data : ", data);
   if (!response.ok) {
     let message = "An error occured ...";
 
