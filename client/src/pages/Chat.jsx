@@ -12,33 +12,28 @@ import ChatBox from "../components/ChatBox";
 const Chat = () => {
   const { user } = useContext(AuthContext);
   const [showUsersList, setShowUsersList] = useState(false);
-  const { userChats, isUserChatsLoading, updateCurrentChat} =
+  const { userChats, isUserChatsLoading, updateCurrentChat } =
     useContext(ChatContext);
   const [users, setUsers] = useState();
 
   return (
     <div
-      className={`min-h-screen ${styles.padding} flex justify-center xl:mt-36 relative text-[15px] text-white`}
+      className={`h-screen ${styles.padding} flex justify-center relative text-[15px] text-white lg:-mt-12`}
     >
       {showUsersList && (
         <PotentialChats setShowUsersList={setShowUsersList} users={users} />
       )}
       <div className="w-[90%] flex flex-row gap-3 justify-center items-center">
         <div className="w-[30%] h-[700px] ">
-          <div className="h-[5%]">
-            {userChats < 1 ? null : (
-              <motion.button
-                className="ml-10 flex flex-row gap-4 items-center justify-center hover:text-light-green-color"
-                onClick={() => setShowUsersList(true)}
-              >
-                <img
-                  src={edit_icon}
-                  alt="frame"
-                  className="w-[20px] h-[20px]"
-                />
-                <p className="sm:hidden lg:flex xl:flex xs:hidden">New chat</p>
-              </motion.button>
-            )}
+          <div className="h-[5%] flex flex-row">
+            <motion.button
+              className="ml-10 flex flex-row gap-4 items-center justify-center hover:text-light-green-color"
+              onClick={() => setShowUsersList(true)}
+            >
+              <img src={edit_icon} alt="frame" className="w-[20px] h-[20px]" />
+              <p className="sm:hidden lg:flex xl:flex xs:hidden">New chat</p>
+            </motion.button>
+            
           </div>
           <div className="overflow-y-scroll h-[95%] sm:visible lg:visible xl:visible xs:invisible">
             {isUserChatsLoading && <ClipLoader color="#000000" size={30} />}

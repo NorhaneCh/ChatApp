@@ -8,6 +8,7 @@ import { useFetchRecipentUser } from "../hooks/useFetchRecipent";
 import moment from "moment";
 import InputEmoji from "react-input-emoji";
 import ChatOptions from "./ChatOptions";
+import { useOnKeyPress } from "../hooks/useOnKeyPress";
 
 const ChatBox = ({ setShowUsersList }) => {
   const {
@@ -26,6 +27,11 @@ const ChatBox = ({ setShowUsersList }) => {
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleSendMessage = () => {
+    sendTextMessage(textMessage, user, currentChat, setTextMessage);
+  };
+  useOnKeyPress(handleSendMessage, "Enter");
   return (
     <div className="bg-white/5 h-[700px] rounded-md rounded-l-none flex-col items-center justify-center text-[13px] w-full">
       {!currentChat ? (
@@ -63,9 +69,10 @@ const ChatBox = ({ setShowUsersList }) => {
                   <ClipLoader color="#ffff" size={50} />
                 </div>
               ) : (
-                <div className="px-2">
+                <div className="px-2 py-3">
                   {messages?.map((message, index) => (
                     <div
+                      ref={scroll}
                       key={index}
                       className={`px-4 py-2 mt-3 relative rounded-[10px] overflow-hidden max-w-[450px] min-w-[100px] ${
                         message.senderId === user?._id

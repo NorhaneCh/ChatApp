@@ -180,7 +180,6 @@ export const ChatContextProvider = ({ children, user }) => {
         messageError,
         currentChat,
         sendTextMessage,
-        currentChat,
         deleteChat,
         onLineUsers,
       }}
